@@ -163,7 +163,7 @@ landstcollection = ee.ImageCollection("LANDSAT/LE07/C02/T1") \
 
 
 def compute_veg_indices(start_date, end_date):
-        print('running')
+
         # geometry = ee.FeatureCollection("projects/ee-muthamijohn/assets/arthi-galana")
        
         # Drought_Index=Drought_Index.select('NDVI')
@@ -305,7 +305,7 @@ with st.spinner('Wait for it...'):
 
     first_sequence = current_sequence
 
-    print(first_sequence)
+
 
     # First, convert the date strings in the first_sequence list to datetime objects
     from datetime import datetime, timedelta
@@ -320,7 +320,7 @@ with st.spinner('Wait for it...'):
         end_date = start_date + timedelta(days=16)
         date_pairs.append((start_date.strftime(date_format), end_date.strftime(date_format)))
 
-    print(date_pairs)
+
 
     # Perform computations for each date pair and store the results in a list
     data = []
@@ -363,7 +363,6 @@ with st.spinner('Wait for it...'):
     pd.set_option('display.max_columns', None)
     pd.set_option('display.max_rows', None)
 
-    print(standardized_df)
 
     #...............Mean of the standardized drought index values for each month.................#
 
@@ -379,7 +378,7 @@ with st.spinner('Wait for it...'):
     # Group by 'start_date' and compute mean for all columns
     standardized_df= standardized_df.groupby('start_date').mean().reset_index()
 
-    print(standardized_df)
+
 
     #......................Mean of the indeces values for each month..............................#
     df1 = df
@@ -581,7 +580,7 @@ with st.spinner('Wait for it...'):
         st.dataframe(standardized_df,use_container_width=True)
         
     with col2:    
-        st.plotly_chart(fig_standardized_drought_index)
+        st.plotly_chart(fig_standardized_drought_index,use_container_width=True)
     
 with st.sidebar:  
     st.write("Download The CSV data here:")    
