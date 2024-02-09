@@ -575,12 +575,8 @@ with st.spinner('Wait for it...'):
     
     Map.to_streamlit(height=400) 
     # create columns for the graph and dataframe
-    col1,col2 = st.columns(2)
-    with col1:
-        st.dataframe(standardized_df,use_container_width=True)
-        
-    with col2:    
-        st.plotly_chart(fig_standardized_drought_index,use_container_width=True)
+    st.dataframe(standardized_df,use_container_width=True)
+    st.plotly_chart(fig_standardized_drought_index,use_container_width=True)
     
 with st.sidebar:  
     st.write("Download The CSV data here:")    
