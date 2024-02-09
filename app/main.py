@@ -405,11 +405,6 @@ with st.spinner('Wait for it...'):
     
     fig_standardized_drought_index.update_layout(legend = dict(
         orientation ="h",
-        yanchor = "bottom",
-        y=0.7,
-        xanchor = "left",
-        x=0.01,
-        
     ))
         
     # smoothed_df = standardized_df.copy()
