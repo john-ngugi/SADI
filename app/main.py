@@ -9,6 +9,7 @@ from datetime import datetime, timedelta
 import plotly.express as px
 from folium.plugins import Draw
 from streamlit_folium import st_folium
+import statsmodels.api as sm
 
 st.set_page_config(
 page_title="SADI",
@@ -21,8 +22,9 @@ st.markdown("---")
 
 #add data 
 
-
 json_data = st.secrets['JSON_KEY']
+
+
 
 json_data = json_data
 # Preparing values
@@ -76,15 +78,15 @@ col1,col2,col3 = st.columns(3)
 
 with col1:
     start_year = int(st.selectbox(
-        'enter start_year',
+        'enter start year',
         ('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023')
     ))
 
 
 with col2:    
     end_year = int(st.selectbox(
-        'enter end_year',
-        ('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'))
+        'enter end year',
+        ('2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'),index=5)
     )
 
 
@@ -393,37 +395,39 @@ with st.spinner('Wait for it...'):
     # Group by 'start_date' and compute mean for all columns
     df1= df1.groupby('start_date').mean().reset_index()
     
-    fig_standardized_drought_index = px.line(
-        standardized_df,
-        x="start_date",
-        y = ['Standardized_Drought_Index','VHI_mean','TCI_mean','VCI_mean'],
+    # fig_standardized_drought_index = px.line(
+    #     standardized_df,
+    #     x="start_date",
+    #     y = ['Standardized_Drought_Index','VHI_mean','TCI_mean','VCI_mean'],
         
        
-        title="<b> Drought index mean </b>",
+    #     title="<b> Drought index mean </b>",
+    # )
+    
+        
+    smoothed_df = standardized_df.copy()
+    smoothed_df['Standardized_Drought_Index'] = sm.nonparametric.lowess(
+        standardized_df['Standardized_Drought_Index'], standardized_df.index, frac=0.3
+    )[:, 1]
+    smoothed_df['VHI_mean'] = sm.nonparametric.lowess(
+        standardized_df['VHI_mean'], standardized_df.index, frac=0.3
+    )[:, 1]
+    smoothed_df['TCI_mean'] = sm.nonparametric.lowess(
+        standardized_df['TCI_mean'], standardized_df.index, frac=0.3
+    )[:, 1]
+    smoothed_df['VCI_mean'] = sm.nonparametric.lowess(
+        standardized_df['VCI_mean'], standardized_df.index, frac=0.3
+    )[:, 1]
+
+    # Plotting the smoothed DataFrame
+    fig_standardized_drought_index = px.line(
+        smoothed_df,
+        x="start_date",
+        y=['Standardized_Drought_Index', 'VHI_mean', 'TCI_mean', 'VCI_mean'],
+        title="<b>Smoothed Drought Index Mean</b>",
     )
     
-    
-
-    
     #....................................................#
-
-    # Plot the line graph using the modified DataFrame
-    plt.figure(figsize=(12, 6))
-    plt.plot(standardized_df['start_date'], standardized_df['Standardized_Drought_Index'], marker='o', label='Standardized_Drought_Index')
-    plt.plot(df1['start_date'], df1['VHI_mean'], label='VHI_mean')
-    plt.plot(df1['start_date'], df1['TCI_mean'], label='TCI_mean')
-    plt.plot(df1['start_date'], df1['VCI_mean'], label='VCI_mean')
-
-    # Customize the plot
-    plt.xlabel('Date')
-    plt.ylabel('Standardized index mean')
-    plt.title('Athi-Galana Basin mean Drought index Over Time')
-    plt.xticks(rotation=45)
-    plt.grid(True)
-    plt.legend()
-    # st.pyplot(fig=plt, clear_figure=None, use_container_width=True)
-
-
 
     ######################################################
 
