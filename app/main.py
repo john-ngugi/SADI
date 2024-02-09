@@ -394,37 +394,37 @@ with st.spinner('Wait for it...'):
     # Group by 'start_date' and compute mean for all columns
     df1= df1.groupby('start_date').mean().reset_index()
     
-    # fig_standardized_drought_index = px.line(
-    #     standardized_df,
-    #     x="start_date",
-    #     y = ['Standardized_Drought_Index','VHI_mean','TCI_mean','VCI_mean'],
+    fig_standardized_drought_index = px.line(
+        standardized_df,
+        x="start_date",
+        y = ['Standardized_Drought_Index','VHI_mean','TCI_mean','VCI_mean'],
         
        
-    #     title="<b> Drought index mean </b>",
-    # )
+        title="<b> Drought index mean </b>",
+    )
     
         
-    smoothed_df = standardized_df.copy()
-    smoothed_df['Standardized_Drought_Index'] = sm.nonparametric.lowess(
-        standardized_df['Standardized_Drought_Index'], standardized_df.index, frac=0.3
-    )[:, 1]
-    smoothed_df['VHI_mean'] = sm.nonparametric.lowess(
-        standardized_df['VHI_mean'], standardized_df.index, frac=0.3
-    )[:, 1]
-    smoothed_df['TCI_mean'] = sm.nonparametric.lowess(
-        standardized_df['TCI_mean'], standardized_df.index, frac=0.3
-    )[:, 1]
-    smoothed_df['VCI_mean'] = sm.nonparametric.lowess(
-        standardized_df['VCI_mean'], standardized_df.index, frac=0.3
-    )[:, 1]
+    # smoothed_df = standardized_df.copy()
+    # smoothed_df['Standardized_Drought_Index'] = sm.nonparametric.lowess(
+    #     standardized_df['Standardized_Drought_Index'], standardized_df.index, frac=0.3
+    # )[:, 1]
+    # smoothed_df['VHI_mean'] = sm.nonparametric.lowess(
+    #     standardized_df['VHI_mean'], standardized_df.index, frac=0.3
+    # )[:, 1]
+    # smoothed_df['TCI_mean'] = sm.nonparametric.lowess(
+    #     standardized_df['TCI_mean'], standardized_df.index, frac=0.3
+    # )[:, 1]
+    # smoothed_df['VCI_mean'] = sm.nonparametric.lowess(
+    #     standardized_df['VCI_mean'], standardized_df.index, frac=0.3
+    # )[:, 1]
 
-    # Plotting the smoothed DataFrame
-    fig_standardized_drought_index = px.line(
-        smoothed_df,
-        x="start_date",
-        y=['Standardized_Drought_Index', 'VHI_mean', 'TCI_mean', 'VCI_mean'],
-        title="<b>Smoothed Drought Index Mean</b>",
-    )
+    # # Plotting the smoothed DataFrame
+    # fig_standardized_drought_index = px.line(
+    #     smoothed_df,
+    #     x="start_date",
+    #     y=['Standardized_Drought_Index', 'VHI_mean', 'TCI_mean', 'VCI_mean'],
+    #     title="<b>Smoothed Drought Index Mean</b>",
+    # )
     
     #....................................................#
 
